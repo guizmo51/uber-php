@@ -331,6 +331,17 @@ class Client
         try {
             $response = $client->$verb($url, $config);
         } catch (HttpClientException $e) {
+            
+            if($e->hasResponse()){
+
+                $response = $e->getResponse();
+                
+                if ($body = $response->getBody()) {
+                    return json_decode($body);
+                }
+
+            }
+            
             throw new Exception($e->getMessage());
         }
 
